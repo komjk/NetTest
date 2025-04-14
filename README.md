@@ -10,7 +10,7 @@ A Python implementation of PowerShell's `Test-NetConnection` cmdlet, with additi
 ## Usage
 
 ```
-python tnc.py [-h] [-p PORT] [--no-ping] [-t] [-c] [-L] [-v] [-nc] [-o OUTPUT]
+python nettest.py [-h] [-p PORT] [--no-ping] [-t] [-c] [-L] [-v] [-nc] [-o OUTPUT]
               [--timeout TIMEOUT] [-f {json,csv,xml,txt}] target
 ```
 
