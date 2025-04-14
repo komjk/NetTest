@@ -209,7 +209,7 @@ def wait_animation():
             time.sleep(0.1)
 
 def main():
-    parser = argparse.ArgumentParser(description='Test Network Connection (TNC)')
+    parser = argparse.ArgumentParser(description='Network Connection Tester')
     parser.add_argument('target', help='Target hostname or IP address')
     parser.add_argument('-p', '--port', type=int, help='TCP/UDP port to test', required=True)
     parser.add_argument('-c', '--curl', action='store_true', help='Perform curl-like request')

@@ -1,8 +1,0 @@
-{
-    "target": "google.com",
-    "resolved_ip": "142.251.40.110",
-    "ping_status": "successful",
-    "tcp_port_status": true,
-    "udp_port_status": null,
-    "http_status": null
-}

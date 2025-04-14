@@ -1,19 +1,6 @@
-# Test Network Connection (TNC) - Python Implementation
+# Network Connection Tester - Python Implementation
 
 A Python implementation of PowerShell's `Test-NetConnection` cmdlet, with additional features like curl requests, colorized output, and file output in multiple formats.
-
-## Features
-
-- Hostname to IP resolution
-- ICMP ping testing
-- TCP port connection testing
-- Traceroute capability
-- HTTP/HTTPS requests (curl-like functionality with authentic output)
-- Accurate curl emulation with different verbosity levels (matching real curl output)
-- Real-time progress updates for all operations
-- Colored output for better readability (with fallback for terminals without color support)
-- Save results to file in JSON, CSV, XML, or text formats
-- Configurable timeouts for network operations
 
 ## Requirements
 
@@ -40,68 +27,6 @@ python tnc.py [-h] [-p PORT] [--no-ping] [-t] [-c] [-L] [-v] [-nc] [-o OUTPUT]
 - `-o`, `--output`: Output file path to save results
 - `--timeout`: Timeout in seconds for network operations (default: 3)
 - `-f`, `--format`: Output format (json, csv, xml, txt) (default: txt)
-
-### Examples
-
-Basic connection test:
-```
-python tnc.py google.com
-```
-
-Test connection to a specific port:
-```
-python tnc.py google.com -p 443
-```
-
-Perform a basic curl-like request:
-```
-python tnc.py google.com -c
-```
-
-Curl with increased verbosity (like curl -v):
-```
-python tnc.py google.com -c -v
-```
-
-Curl with very high verbosity (like curl -vvv):
-```
-python tnc.py google.com -c -vvv
-```
-
-Follow redirects (like curl -L):
-```
-python tnc.py google.com -c -L
-```
-
-Use a longer timeout for slow connections:
-```
-python tnc.py slow-server.example.com -c --timeout 10
-```
-
-Trace route to the target:
-```
-python tnc.py google.com -t
-```
-
-Save results to a JSON file:
-```
-python tnc.py google.com -p 443 -o results.json -f json
-```
-
-Save results to a text file:
-```
-python tnc.py google.com -c -t -o network_test.txt
-```
-
-## Curl Verbosity Levels
-
-The script emulates the real curl command's verbosity levels:
-
-- No `-v`: Basic output showing only status code, content type and length
-- `-v`: Shows connection details, request/response status, and a snippet of the response body
-- `-vv`: Adds request/response headers and more connection details
-- `-vvv`: Adds SSL/TLS details (for HTTPS), DNS resolution info, and more response body content
-- `-vvvv`: Maximum verbosity with timing information and debugging details
 
 ## Notes
 
