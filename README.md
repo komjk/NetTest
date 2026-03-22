@@ -1,37 +1,72 @@
-# Network Connection Tester - Python Implementation
+# NetTest
 
-A Python implementation of PowerShell's `Test-NetConnection` cmdlet, with additional features like curl requests, colorized output, and file output in multiple formats.
+A Python implementation of PowerShell's `Test-NetConnection` cmdlet — with colorized output, HTTP(S) requests, redirect following, traceroute, and JSON result export.
 
 ## Requirements
 
-- Python 3.6+
-- Requests library (`pip install requests`)
+- Python 3.10+
+- `colorama` *(optional — output still works without it)*
+
+```bash
+pip install colorama
+```
+
+No other third-party libraries required. Uses only the Python standard library.
 
 ## Usage
 
 ```
-python nettest.py [-h] [-p PORT] [--no-ping] [-t] [-c] [-L] [-v] [-nc] [-o OUTPUT]
-              [--timeout TIMEOUT] [-f {json,csv,xml,txt}] target
+python nettest.py [-h] -p PORT -proto {tcp,udp} [-c] [--tls] [-L] [-v] [-t] [-o FILE] target
 ```
 
 ### Arguments
 
-- `target`: Target hostname or IP address (required)
-- `-p`, `--port`: TCP port to test
-- `--no-ping`: Skip ping test
-- `-t`, `--trace`: Perform traceroute
-- `-c`, `--curl`: Perform curl-like request
-- `-L`, `--follow-redirects`: Follow redirects (implied with curl)
-- `-v`, `--verbose`: Increase verbosity (can be used multiple times)
-- `-nc`: Disable colored output
-- `-o`, `--output`: Output file path to save results
-- `--timeout`: Timeout in seconds for network operations (default: 3)
-- `-f`, `--format`: Output format (json, csv, xml, txt) (default: txt)
+| Argument | Description |
+|---|---|
+| `target` | Target hostname or IP address *(required)* |
+| `-p`, `--port` | Port to test *(required)* |
+| `-proto` | Protocol — `tcp` or `udp` *(required)* |
+| `-c`, `--curl` | Perform an HTTP(S) GET request |
+| `--tls` | Use HTTPS instead of HTTP (use with `-c`) |
+| `-L`, `--follow-redirects` | Follow HTTP redirects (up to 5 hops) |
+| `-v`, `--verbose` | Increase verbosity; repeat for more detail (`-v` / `-vv` / `-vvv` / `-vvvv`) |
+| `-t`, `--trace` | Perform a traceroute |
+| `-o FILE` | Save results to a JSON file |
+
+### Examples
+
+```bash
+# TCP port check
+python nettest.py example.com -p 443 -proto tcp
+
+# HTTPS request with verbose output
+python nettest.py example.com -p 443 -proto tcp -c --tls -vv
+
+# HTTP request following redirects, save results
+python nettest.py example.com -p 80 -proto tcp -c -L -o results.json
+
+# UDP port check with traceroute
+python nettest.py 1.1.1.1 -p 53 -proto udp -t
+```
+
+## Output
+
+Each run prints:
+
+- Local and resolved remote IP
+- Ping result
+- TCP/UDP port status
+- HTTP(S) response status *(if `-c` is used)*
+- Traceroute output *(if `-t` is used)*
+- Pass/fail summary
+
+Results saved with `-o` are JSON, and include a UTC timestamp.
 
 ## Notes
 
-- On Windows, the script will attempt to enable ANSI colors, but they may not work in all terminal environments
-- The `-v` option can be used multiple times for increased verbosity (e.g., `-vvv` for very verbose output)
-- Output files are sanitized and validated for security
-- The real curl command-line tool is NOT required - the script uses Python's requests library
-- Real-time progress updates are provided during each step of the process 
+- Targets are validated before any network activity — malformed hostnames and IPs are rejected early
+- All network operations have timeouts; nothing hangs indefinitely
+- HTTPS uses `ssl.create_default_context()` — certificate verification is enforced by default
+- UDP "open" detection is best-effort; a non-response may mean open *or* silently filtered
+- `colorama` is optional; if not installed, output is plain text with no crashes
+- No external tools required (`curl`, `ping`, `traceroute` are invoked as system binaries where available)
